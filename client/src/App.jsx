@@ -1,4 +1,3 @@
-
 function App() {
   return (
     <div className="flex items-center justify-center mt-10">
