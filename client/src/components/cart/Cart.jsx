@@ -49,7 +49,7 @@ const Cart = () => {
                         alt={item.title}
                         className="w-15 h-15 object-cover rounded"
                       />
-                      <span className="truncate">{item.title}</span>
+                      <span className="max-md:hidden truncate">{item.title}</span>
                     </div>
                   </td>
 
