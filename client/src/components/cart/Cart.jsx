@@ -28,7 +28,7 @@ const Cart = () => {
 
   return (
     <div className="w-full">
-      <div className="bg-emerald-100 md:p-3 shadow-lg rounded">
+      <div className="bg-emerald-100 md:pb-3 md:px-3 shadow-lg rounded">
         {isCart && (
           <div className="flex items-center justify-between border-b border-gray-400 p-2">
             <div className="flex items-center gap-3">
@@ -46,7 +46,7 @@ const Cart = () => {
         )}
 
         {/* FIXED HEIGHT SCROLL AREA */}
-        <div className="h-[410px] md:h-[380px] overflow-y-auto">
+        <div className="h-[69vh] md:h-[80vh] lg:h-[70vh] overflow-y-auto">
           {isCart ? (
             cart?.map((item) => (
               <div
