@@ -38,13 +38,13 @@ const Cart = () => {
             </div>
             <button
               onClick={handlePlaceOrder}
-              className="bg-black text-white shadow px-3 md:px-4 md:py-1 rounded text-base md:text-lg cursor-pointer hover:bg-black/80 transition-all duration-300"
+              className="bg-black text-white shadow px-3 md:px-4 py-1 rounded text-base md:text-lg cursor-pointer hover:bg-black/80 transition-all duration-300"
             >
               Place Order
             </button>
           </div>
         )}
-        <div className="max-h-80 md:max-h-[370px] overflow-y-auto">
+        <div className="max-h-96 md:max-h-[370px] overflow-y-auto">
           {isCart ? (
             cart &&
             cart?.map((item) => (
