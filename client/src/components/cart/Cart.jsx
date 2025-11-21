@@ -46,7 +46,7 @@ const Cart = () => {
         )}
 
         {/* FIXED HEIGHT SCROLL AREA */}
-        <div className="h-[380px] md:h-[380px] overflow-y-auto">
+        <div className="h-screen md:h-[380px] overflow-y-auto">
           {isCart ? (
             cart?.map((item) => (
               <div
