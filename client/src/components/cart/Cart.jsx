@@ -1,16 +1,13 @@
 import { useSelector, useDispatch } from "react-redux";
-import { removeItem, updateQty } from "../../services/slice";
+import { useNavigate } from "react-router-dom";
+import { removeItem, updateQty, clearCart } from "../../services/slice";
 
 const Cart = () => {
-  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart.items);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const isCartNotEmpty = cart.length > 0;
-
-  const totalAmount = cart.reduce(
-    (acc, item) => acc + item.price * item.qty,
-    0
-  );
+  const isCart = cart.length > 0;
 
   const handleQtyChange = (id, value) => {
     const qty = Number(value);
@@ -18,85 +15,102 @@ const Cart = () => {
     dispatch(updateQty({ id, qty }));
   };
 
+  const handlePlaceOrder = () => {
+    dispatch(clearCart());
+    alert("YOUR ORDER HAS BEEN PLACED!!!");
+    navigate("/");
+  };
+
+  const totalAmount = cart.reduce(
+    (acc, item) => acc + item.price * item.qty,
+    0
+  );
+
   return (
     <div className="w-full p-4">
-      <div className="overflow-auto max-h-[379px] bg-gray-300 rounded-t-xl shadow">
-        {isCartNotEmpty ? (
-          <table className="w-full table-fixed">
-            <thead className="bg-gray-200 sticky top-0 shadow-sm">
-              <tr className="text-gray-800 text-sm">
-                <th className="max-md:hidden p-3">No.</th>
-                <th className="p-3">Product</th>
-                <th className="p-3">Price</th>
-                <th className="p-3">Qty</th>
-                <th className="max-md:hidden p-3">Subtotal</th>
-                <th className="p-2">Action</th>
-              </tr>
-            </thead>
-
-            <tbody className="text-center font-medium">
-              {cart.map((item, index) => (
-                <tr
-                  key={item.id}
-                  className="border-b border-gray-100"
-                >
-                  <td className="max-md:hidden p-2">{index + 1}</td>
-
-                  <td className="p-2 w-32 md:w-48">
-                    <div className="flex items-center gap-2 justify-start truncate">
-                      <img
-                        src={item.thumbnail}
-                        alt={item.title}
-                        className="w-15 h-15 object-cover rounded"
-                      />
-                      <span className="max-md:hidden truncate">{item.title}</span>
-                    </div>
-                  </td>
-
-                  <td className="p-2 font-bold text-green-800">
-                    ₹{item.price?.toFixed(2)}
-                  </td>
-
-                  <td className="p-2">
+      <div className="bg-emerald-100 md:p-3 shadow-lg rounded ">
+        {isCart && (
+          <div className="flex items-center justify-between border-b border-gray-400 p-2">
+            <div className="flex items-center gap-3">
+              <span className="text-sm text-gray-500 md:text-xl font-medium">
+                {cart?.length} {cart?.length <= 1 ? "item" : "items"}
+              </span>
+            </div>
+            <button
+              onClick={handlePlaceOrder}
+              className="bg-black text-white shadow px-3 md:px-4 md:py-1 rounded text-base md:text-lg cursor-pointer hover:bg-black/80 transition-all duration-300"
+            >
+              Place Order
+            </button>
+          </div>
+        )}
+        <div className="max-h-80 md:max-h-[370px] overflow-y-auto">
+          {isCart ? (
+            cart &&
+            cart?.map((item) => (
+              <div
+                key={item?.id}
+                className="flex items-center max-md:gap-2 justify-between px-2 md:px-5 py-3 border-b border-gray-300"
+              >
+                <div className="flex items-center gap-1">
+                  <div className="flex items-center justify-center bg-gray-100 rounded-xl md:mr-1">
+                    <img
+                      src={item.thumbnail}
+                      alt={item?.thumbnail}
+                      className="max-md:hidden w-10 md:w-[70px] md:h-[70px] object-cover shrink-0"
+                    />
+                  </div>
+                  <div className=" flex flex-col justify-start">
+                    <h2 className="max-md:w-28 md:w-80 truncate text-sm md:text-lg font-semibold">
+                      {item?.title}
+                    </h2>
+                    <p className="text-xs md:text-sm font-medium text-gray-500">
+                      {item?.brand}
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-end md:items-center justify-between w-1/2 md:w-1/2">
+                  <div className="flex">
                     <input
                       type="number"
-                      min={1}
-                      value={item.qty}
-                      onChange={(e) => handleQtyChange(item.id, e.target.value)}
-                      className="w-12 rounded px-2 border outline-none"
+                      value={item?.qty}
+                      onChange={(e) =>
+                        handleQtyChange(item?.id, e.target.value)
+                      }
+                      placeholder="1"
+                      className="max-md:text-sm border border-gray-500 rounded w-15 md:max-w-18 p-1"
                     />
-                  </td>
-
-                  <td className="max-md:hidden p-2 font-bold text-green-800">
-                    ₹{(item.price * item.qty).toFixed(2)}
-                  </td>
-
-                  <td className="p-2">
+                  </div>
+                  <div className="flex flex-col gap-1 items-start">
+                    <span className="text-green-800 font-extrabold text-base md:text-lg">
+                      ${(item?.price * item?.qty).toFixed(2)}
+                    </span>
                     <button
                       onClick={() => dispatch(removeItem(item.id))}
-                      className="cursor-pointer"
+                      className="bg-cyan-600 text-white max-md:text-sm px-2 
+                      md:px-4 py-1 cursor-pointer rounded hover:bg-cyan-500 transition-all duration-300"
                     >
-                      ❌
+                      Remove
                     </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <div className="p-8 text-center text-gray-600">
-            <p className="text-lg font-semibold uppercase flex justify-center gap-2">
-              Your cart is empty 🛍️
-            </p>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="p-8 text-center text-gray-600">
+              <p className="text-lg font-semibold uppercase flex justify-center gap-2">
+                Your cart is empty 🛍️
+              </p>
+            </div>
+          )}
+        </div>
+        {isCart && (
+          <div className="flex justify-between w-full py-3 px-3 md:px-10 rounded-b-xl shadow text-xl md:text-xl bg-black/80 text-white font-bold">
+            <span className="ml-4">Total</span>
+            <p className="text-white">${totalAmount.toFixed(2)}</p>
           </div>
         )}
       </div>
-
-      {isCartNotEmpty && (
-        <div className="flex justify-end bg-white p-3 text-gray-900 font-bold rounded-b-xl shadow">
-          Total: ₹{totalAmount.toFixed(2)}
-        </div>
-      )}
     </div>
   );
 };
