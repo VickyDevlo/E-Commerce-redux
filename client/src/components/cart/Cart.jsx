@@ -27,8 +27,8 @@ const Cart = () => {
   );
 
   return (
-    <div className="w-full p-4">
-      <div className="bg-emerald-100 md:p-3 shadow-lg rounded ">
+    <div className="w-full">
+      <div className="bg-emerald-100 md:p-3 shadow-lg rounded">
         {isCart && (
           <div className="flex items-center justify-between border-b border-gray-400 p-2">
             <div className="flex items-center gap-3">
@@ -44,51 +44,49 @@ const Cart = () => {
             </button>
           </div>
         )}
-        <div className="max-h-96 md:max-h-[370px] overflow-y-auto">
+
+        {/* FIXED HEIGHT SCROLL AREA */}
+        <div className="h-[380px] md:h-[380px] overflow-y-auto">
           {isCart ? (
-            cart &&
             cart?.map((item) => (
               <div
-                key={item?.id}
+                key={item.id}
                 className="flex items-center max-md:gap-2 justify-between px-2 md:px-5 py-3 border-b border-gray-300"
               >
                 <div className="flex items-center gap-1">
                   <div className="flex items-center justify-center bg-gray-100 rounded-xl md:mr-1">
                     <img
                       src={item.thumbnail}
-                      alt={item?.thumbnail}
+                      alt={item.title}
                       className="max-md:hidden w-10 md:w-[70px] md:h-[70px] object-cover shrink-0"
                     />
                   </div>
-                  <div className=" flex flex-col justify-start">
+
+                  <div className="flex flex-col justify-start">
                     <h2 className="max-md:w-28 md:w-80 truncate text-sm md:text-lg font-semibold">
-                      {item?.title}
+                      {item.title}
                     </h2>
                     <p className="text-xs md:text-sm font-medium text-gray-500">
-                      {item?.brand}
+                      {item.brand}
                     </p>
                   </div>
                 </div>
-                <div className="flex items-end md:items-center justify-between w-1/2 md:w-1/2">
-                  <div className="flex">
-                    <input
-                      type="number"
-                      value={item?.qty}
-                      onChange={(e) =>
-                        handleQtyChange(item?.id, e.target.value)
-                      }
-                      placeholder="1"
-                      className="max-md:text-sm border border-gray-500 rounded w-15 md:max-w-18 p-1"
-                    />
-                  </div>
+
+                <div className="flex items-end md:items-center justify-between w-1/2">
+                  <input
+                    type="number"
+                    value={item.qty}
+                    onChange={(e) => handleQtyChange(item.id, e.target.value)}
+                    className="max-md:text-sm border border-gray-500 rounded w-16 p-1"
+                  />
+
                   <div className="flex flex-col gap-1 items-start">
                     <span className="text-green-800 font-extrabold text-base md:text-lg">
-                      ${(item?.price * item?.qty).toFixed(2)}
+                      ${(item.price * item.qty).toFixed(2)}
                     </span>
                     <button
                       onClick={() => dispatch(removeItem(item.id))}
-                      className="bg-cyan-600 text-white max-md:text-sm px-2 
-                      md:px-4 py-1 cursor-pointer rounded hover:bg-cyan-500 transition-all duration-300"
+                      className="bg-cyan-600 text-white max-md:text-sm px-2 md:px-4 py-1 rounded hover:bg-cyan-500 transition-all duration-300"
                     >
                       Remove
                     </button>
@@ -98,19 +96,20 @@ const Cart = () => {
             ))
           ) : (
             <div className="p-8 text-center text-gray-600">
-              <p className="text-lg font-semibold uppercase flex justify-center gap-2">
+              <p className="text-lg font-semibold uppercase flex flex-col justify-center gap-2 my-32">
                 Your cart is empty 🛍️
               </p>
             </div>
           )}
         </div>
-        {isCart && (
-          <div className="flex justify-between w-full py-3 px-3 md:px-10 rounded-b-xl shadow text-xl md:text-xl bg-black/80 text-white font-bold">
-            <span className="ml-4">Total</span>
-            <p className="text-white">${totalAmount.toFixed(2)}</p>
-          </div>
-        )}
       </div>
+
+      {isCart && (
+        <div className="flex justify-between w-full py-3 px-3 md:px-10 shadow text-xl bg-black/80 text-white font-bold">
+          <span>Total</span>
+          <p>${totalAmount.toFixed(2)}</p>
+        </div>
+      )}
     </div>
   );
 };
